@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv='Content-Type' content='text/html;charset=UTF-8'/>
+		
+
+		<script src="resources/sap-ui-core.js"
+				id="sap-ui-bootstrap"
+				data-sap-ui-libs="sap.ui.commons,sap.ui.ux3,sap.ui.table"
+				data-sap-ui-theme="sap_corbu">
+		</script>
+		<style>
+		#formId {
+			height:207px;
+		}
+		
+		
+		</style>
+		<!-- add sap.ui.table,sap.ui.ux3 and/or other libraries to 'data-sap-ui-libs' if required -->
+
+		<script>
+				sap.ui.localResources("datacollections");
+				jQuery.sap.require("sap.ui.core.routing.Router");
+				jQuery.sap.require("sap.ui.core.routing.HashChanger");
+				//var view = sap.ui.view({id:"idContent1", viewName:"datacollections.Content", type:sap.ui.core.mvc.ViewType.JS});
+				//view.placeAt("content");
+				
+				var oShell = sap.ui.ux3.Shell("shellId",{
+					appTitle: "OData Collection",
+					showLogoutButton: false,
+					showSearchTool: false,
+					showFeederTool:false,
+					worksetItems: [
+						new sap.ui.ux3.NavigationItem("idContent1", {
+							key: "Content",
+							text: "Products Collection"
+						}),
+						
+						new sap.ui.ux3.NavigationItem("idContent2", {
+							key: "Person",
+							text: "People Collection"
+						})
+						
+						
+					],
+					worksetItemSelected: function(e) {
+						this.removeAllContent();
+						var selected = e.getParameter("key");
+						var oHashChanger = new sap.ui.core.routing.HashChanger();
+						oHashChanger.setHash(oRouter.getURL(selected));
+						
+					}
+				});
+				oShell.placeAt('content');
+				var oRouter = new sap.ui.core.routing.Router([
+         					{
+         						pattern: "",
+         						name:"Content",
+         						view:"datacollections.Content",
+         						viewType:sap.ui.core.mvc.ViewType.JS,
+         						targetControl:"shellId",
+         						targetAggregation:"content", //content or Page
+         						clearTarget:true,
+         						callback: function() {
+         							oShell.setSelectedWorksetItem("idContent1");
+         						}
+         					},
+         					{
+        						pattern: ["Person","Person"],
+        						name:"Person",
+        						view:"datacollections.Person",
+        						viewType:sap.ui.core.mvc.ViewType.JS,
+        						targetControl:"shellId",
+        						targetAggregation:"content", //content or Page
+        						clearTarget:true,
+        						callback: function() {
+        							oShell.setSelectedWorksetItem("idContent2");
+        						}
+        					} 
+         				]);
+				oRouter.register("appRouter1");
+				//initialize the router
+				oRouter.initialize();
+				
+		</script>
+
+	</head>
+	<body class="sapUiBody" role="application">
+		<div id="content"></div>
+		
+		
+	</body>
+</html>
